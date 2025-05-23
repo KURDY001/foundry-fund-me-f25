@@ -1,1 +1,10 @@
-.qodo
+# Docs
+Docs
+
+# Dotenv file
+.env
+
+broadcast/
+lib/
+
+.DS_store/
