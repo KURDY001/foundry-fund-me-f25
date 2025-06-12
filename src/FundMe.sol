@@ -7,12 +7,11 @@ import {PriceConverter} from "./PriceConverter.sol";
 
 error Fundme_NotOwner();
 
-
 contract FundMe {
     //type decleration
     using PriceConverter for uint256;
 
-// state variables
+    // state variables
     mapping(address => uint256) private s_addressToAmountFunded;
     address[] private s_funders;
 
@@ -41,20 +40,19 @@ contract FundMe {
         // require(msg.sender == owner);
         if (msg.sender != i_owner) revert Fundme_NotOwner();
 
-    
         _;
     }
 
     function cheaperWithdraw() public onlyOwner {
-        uint256 fundersLength =s_funders.length;
-        for(uint256 funderIndex = 0; funderIndex < fundersLength; funderIndex++) {
+        uint256 fundersLength = s_funders.length;
+        for (uint256 funderIndex = 0; funderIndex < fundersLength; funderIndex++) {
             address funder = s_funders[funderIndex];
             s_addressToAmountFunded[funder] = 0;
         }
-         s_funders = new address[](0);
+        s_funders = new address[](0);
 
-         (bool callSuccess, ) = payable(msg.sender).call{value: address(this).balance}("");
-    require(callSuccess, "Call failed");
+        (bool callSuccess,) = payable(msg.sender).call{value: address(this).balance}("");
+        require(callSuccess, "Call failed");
     }
 
     function withdraw() public onlyOwner {
@@ -94,13 +92,10 @@ contract FundMe {
         fund();
     }
 
-
     /**
      *  View / pure functions (getters)
      */
-    function getAddressToAmountFunded(
-        address fundingAddress
-    )external view returns (uint256) {
+    function getAddressToAmountFunded(address fundingAddress) external view returns (uint256) {
         return s_addressToAmountFunded[fundingAddress];
     }
 
